@@ -1,5 +1,4 @@
 #include "../aoc.cpp"
-#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -8,18 +7,20 @@ const int END = 0;
 const int ID = 2;
 
 void part1() {
-  vector<string> lines = readLines();
+  auto blocks = getBlocks();
+  vector<string> intervals = blocks.at(0);
+  vector<string> ids = blocks.at(1);
+
   vector<pair<ll, int>> events;
-  for (string l : lines) {
-    if (l.empty())
-      continue;
-    auto parts = split(l, '-');
-    if (parts.size() == 1) {
-      events.push_back({stol(parts[0]), ID});
-    } else {
+
+  for (string l : intervals) {
+      auto parts = split(l, '-');
       events.push_back({stol(parts[0]), START});
       events.push_back({stol(parts[1]) + 1, END});
-    }
+  }
+
+  for (string l : ids) {
+      events.push_back({stol(l), ID});
   }
 
   sort(events.begin(), events.end(), [](auto a, auto b) {
@@ -46,11 +47,9 @@ void part1() {
 }
 
 void part2() {
-  vector<string> lines = readLines();
+  auto lines = getBlocks()[0];
   vector<pair<ll, int>> events;
   for (string l : lines) {
-    if (l.empty())
-      break;
     auto parts = split(l, '-');
     events.push_back({stol(parts[0]), START});
     events.push_back({stol(parts[1]) + 1, END});

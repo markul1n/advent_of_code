@@ -1,5 +1,13 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <queue>
 #include <ranges>
+#include <fstream>
+
 using namespace std;
 
 using ll = long long;
@@ -42,3 +50,26 @@ string readLine() {
     return lines[0];
 }
 
+vector<vector<string>> getBlocks() {
+    vector<vector<string>> blocks;
+    vector<string> current;
+
+    auto lines = readLines();
+
+    for (const auto& l : lines) {
+        if (l.empty()) {
+            if (!current.empty()) {
+                blocks.push_back(std::move(current));
+                current.clear();
+            }
+        } else {
+            current.push_back(l);
+        }
+    }
+
+    if (!current.empty()) {
+        blocks.push_back(std::move(current));
+    }
+
+    return blocks;
+}
