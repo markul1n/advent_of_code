@@ -6,6 +6,7 @@ using namespace std;
 char PAPER = '@';
 char EMPTY = '.';
 
+
 void part1() {
   vector<string> grid = readLines();
   int R = grid.size();
