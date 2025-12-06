@@ -1,17 +1,14 @@
-#include <bits/stdc++.h>
 #include "../aoc.cpp"
+#include <bits/stdc++.h>
 
 using namespace std;
 
+void part1() {}
 
-void part1() {
-}
-
-void part2() {
-}
+void part2() {}
 
 int main() {
-    part1();
-    part2();
-    return 0;
+  part1();
+  part2();
+  return 0;
 }
