@@ -7,7 +7,7 @@ const int END = 0;
 const int ID = 2;
 
 void part1() {
-  auto blocks = getBlocks();
+  auto blocks = readBlocks();
   vector<string> intervals = blocks.at(0);
   vector<string> ids = blocks.at(1);
 
@@ -47,7 +47,7 @@ void part1() {
 }
 
 void part2() {
-  auto lines = getBlocks()[0];
+  auto lines = readBlocks()[0];
   vector<pair<ll, int>> events;
   for (string l : lines) {
     auto parts = split(l, '-');

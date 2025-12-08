@@ -10,6 +10,8 @@
 #include <vector>
 #include <tuple>
 #include <functional>
+#include <tuple>
+
 using namespace std;
 
 using ll = long long;
@@ -74,7 +76,7 @@ vector<vector<string>> readGrid() {
   return grid;
 }
 
-vector<vector<string>> getBlocks() {
+vector<vector<string>> readBlocks() {
   vector<vector<string>> blocks;
   vector<string> current;
 
@@ -96,4 +98,16 @@ vector<vector<string>> getBlocks() {
   }
 
   return blocks;
+}
+
+
+template <typename S>
+ostream& operator<<(ostream& os,
+                    const vector<S>& vector) {
+  
+    for (auto i : vector) 
+        os << i << " ";
+
+    os << endl;
+    return os;
 }
