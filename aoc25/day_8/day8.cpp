@@ -32,13 +32,11 @@ public:
   }
 };
 
-void part1() {
-  const int CONNECTIONS = 1000;
-  auto lines = readLines();
-
+vector<tuple<ll, int, int>> getSortedDistances(vector<string> &lines) {
   int N = lines.size();
 
   vector<tuple<ll, int, int>> distances;
+
   for (int i = 0; i < N; i++) {
 
     auto line = lines[i];
@@ -69,6 +67,17 @@ void part1() {
 
   sort(distances.begin(), distances.end(),
        [](auto a, auto b) { return get<0>(a) > get<0>(b); });
+
+  return distances;
+}
+
+void part1() {
+  const int CONNECTIONS = 1000;
+  auto lines = readLines();
+
+  int N = lines.size();
+
+  vector<tuple<ll, int, int>> distances = getSortedDistances(lines);
 
   DisjointSet ds(N);
 
@@ -94,37 +103,7 @@ void part2() {
 
   int N = lines.size();
 
-  vector<tuple<ll, int, int>> distances;
-  for (int i = 0; i < N; i++) {
-
-    auto line = lines[i];
-    auto co = split(line, ',');
-
-    ll x = stol(co[0]);
-    ll y = stol(co[1]);
-    ll z = stol(co[2]);
-
-    for (int j = i + 1; j < N; j++) {
-
-      auto line = lines[j];
-      auto co = split(line, ',');
-
-      ll x2 = stol(co[0]);
-      ll y2 = stol(co[1]);
-      ll z2 = stol(co[2]);
-
-      ll xd = x2 - x;
-      ll yd = y2 - y;
-      ll zd = z2 - z;
-
-      ll d = xd * xd + yd * yd + zd * zd;
-
-      distances.push_back({d, i, j});
-    }
-  }
-
-  sort(distances.begin(), distances.end(),
-       [](auto a, auto b) { return get<0>(a) > get<0>(b); });
+  vector<tuple<ll, int, int>> distances = getSortedDistances(lines);
 
   DisjointSet ds(N);
 
@@ -138,8 +117,8 @@ void part2() {
       if (groups == 1) {
         ll x1 = stol(split(lines[i], ',')[0]);
         ll x2 = stol(split(lines[j], ',')[0]);
-
         cout << x1 * x2 << endl;
+        return;
       }
     }
     distances.pop_back();
