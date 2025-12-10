@@ -18,5 +18,6 @@ cp template.cpp "$FOLDER/$FILE_CPP"
 
 # Create input file
 touch "$FOLDER/input.txt"
+touch "$FOLDER/example.txt"
 
 echo "Created $FOLDER with $FILE_CPP and input.txt"
