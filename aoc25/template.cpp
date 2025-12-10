@@ -1,7 +1,4 @@
 #include "../aoc.cpp"
-#include <bits/stdc++.h>
-
-using namespace std;
 
 void part1() {}
 

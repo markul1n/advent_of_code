@@ -10,6 +10,7 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <cctype>
 
 using namespace std;
 
@@ -19,72 +20,73 @@ using pii = pair<int, int>;
 using pll = pair<long long, long long>;
 
 const string INPUT_FILE = "input.txt";
+const string EXAMPLE    = "example.txt";
+
+void trim(std::string& s) {
+    auto not_space = [](unsigned char c){ return !std::isspace(c); };
+
+    // trim right
+    s.erase(
+        std::ranges::find_if(s | std::views::reverse, not_space).base(),
+        s.end());
+
+    // trim left
+    s.erase(
+        s.begin(),
+        std::ranges::find_if(s, not_space));
+}
 
 vector<string> split(const string &text, char d) {
   vector<string> out;
 
-  for (auto &&part : text | std::views::split(d)) {
+  for (auto &&part : text | views::split(d)) {
     string s(part.begin(), part.end());
-    out.push_back(std::move(s));
+    out.push_back(move(s));
   }
 
   return out;
 }
 
-vector<string> readLines() {
-  ifstream in(INPUT_FILE);
+// -------------------
+// I/O helpers (with optional filename)
+// -------------------
+
+vector<string> readLines(const string& filename = INPUT_FILE) {
+  ifstream in(filename);
   vector<string> lines;
   string line;
 
   while (getline(in, line)) {
-    if (!line.empty() && line.back() == '\r')
-      line.pop_back(); // handle CRLF
+    trim(line);
     lines.push_back(line);
+  }
+
+  while (!lines.empty() && lines.back().empty()) {
+    lines.pop_back();
   }
 
   return lines;
 }
 
-string readLine() {
-  auto lines = readLines();
+string readLine(const string& filename = INPUT_FILE) {
+  auto lines = readLines(filename);
   if (lines.empty()) {
-    cerr << "Input file is empty\n";
+    cerr << "Input file is empty: " << filename << "\n";
     exit(1);
   }
   return lines[0];
 }
 
-vector<vector<string>> readGrid() {
-
-  auto lines = readLines();
-  int R = lines.size();
-
-  vector<vector<string>> grid(R);
-
-  for (int y = 0; y < R; y++) {
-    string line = lines[y];
-    std::istringstream iss(line);
-
-    std::string word;
-
-    while (iss >> word) {
-      grid[y].push_back(word);
-    }
-  }
-
-  return grid;
-}
-
-vector<vector<string>> readBlocks() {
+vector<vector<string>> readBlocks(const string& filename = INPUT_FILE) {
   vector<vector<string>> blocks;
   vector<string> current;
 
-  auto lines = readLines();
+  auto lines = readLines(filename);
 
   for (const auto &l : lines) {
     if (l.empty()) {
       if (!current.empty()) {
-        blocks.push_back(std::move(current));
+        blocks.push_back(move(current));
         current.clear();
       }
     } else {
@@ -93,16 +95,36 @@ vector<vector<string>> readBlocks() {
   }
 
   if (!current.empty()) {
-    blocks.push_back(std::move(current));
+    blocks.push_back(move(current));
   }
 
   return blocks;
 }
 
+vector<vector<string>> readGrid(const string& filename = INPUT_FILE) {
+  auto blocks = readBlocks(filename);
+  auto& lines = blocks.at(0);
+
+  int R = lines.size();
+  vector<vector<string>> grid(R);
+
+  for (int y = 0; y < R; y++) {
+    string line = lines[y];
+    istringstream iss(line);
+
+    string word;
+    while (iss >> word) {
+      grid[y].push_back(word);
+    }
+  }
+
+  return grid;
+}
+
 // --- Printing ---
 
 template <typename S>
-std::ostream &operator<<(std::ostream &os, const std::vector<S> &v) {
+ostream &operator<<(ostream &os, const vector<S> &v) {
   os << "[ ";
   for (size_t i = 0; i < v.size(); ++i) {
     os << v[i];
@@ -115,27 +137,27 @@ std::ostream &operator<<(std::ostream &os, const std::vector<S> &v) {
 
 // pair
 template <typename A, typename B>
-ostream &operator<<(ostream &os, const std::pair<A, B> &p) {
+ostream &operator<<(ostream &os, const pair<A, B> &p) {
   os << "(" << p.first << ", " << p.second << ")";
   return os;
 }
 
 // tuple
-template <class Tuple, std::size_t... Is>
-void print_tuple_impl(ostream &os, const Tuple &t, std::index_sequence<Is...>) {
-  ((os << (Is == 0 ? "" : ", ") << std::get<Is>(t)), ...);
+template <class Tuple, size_t... Is>
+void print_tuple_impl(ostream &os, const Tuple &t, index_sequence<Is...>) {
+  ((os << (Is == 0 ? "" : ", ") << get<Is>(t)), ...);
 }
 
 template <class... Ts>
-ostream &operator<<(ostream &os, const std::tuple<Ts...> &t) {
+ostream &operator<<(ostream &os, const tuple<Ts...> &t) {
   os << "(";
-  print_tuple_impl(os, t, std::index_sequence_for<Ts...>{});
+  print_tuple_impl(os, t, index_sequence_for<Ts...>{});
   os << ")";
   return os;
 }
 
 template <typename T>
-std::ostream &operator<<(std::ostream &os, const std::set<T> &s) {
+ostream &operator<<(ostream &os, const set<T> &s) {
   os << "{ ";
 
   auto it = s.begin();
@@ -152,7 +174,7 @@ std::ostream &operator<<(std::ostream &os, const std::set<T> &s) {
 }
 
 template <typename K, typename V>
-std::ostream &operator<<(std::ostream &os, const std::map<K, V> &m) {
+ostream &operator<<(ostream &os, const map<K, V> &m) {
   os << "{ ";
 
   auto it = m.begin();
