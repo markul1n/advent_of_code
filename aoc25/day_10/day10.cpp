@@ -78,27 +78,33 @@ void part1() {
 
 void part2() {
 
-  auto solve = [](const auto &A, const auto &C) {
+  auto solve = [](const auto &A, const auto &B) {
     z3::context ctx;
     z3::optimize opt(ctx);
 
-    std::vector<z3::expr> x;
-    for (size_t i = 0; i < A[0].size(); i++) {
+    vector<z3::expr> x;
+
+    int Cols = A[0].size();
+    int Rows = A.size();
+
+    for (int i = 0; i < Cols; i++) {
       x.push_back(ctx.int_const(("x" + std::to_string(i)).c_str()));
       opt.add(x[i] >= 0);
     }
 
-    for (size_t i = 0; i < A.size(); i++) {
+    for (int i = 0; i < Rows; i++) {
       z3::expr eq = ctx.int_val(0);
-      for (size_t j = 0; j < A[i].size(); j++) {
-        eq = eq + ctx.int_val((int)A[i][j]) * x[j];
+      for (int j = 0; j < Cols; j++) {
+        eq = eq + ctx.int_val(A[i][j]) * x[j];
       }
-      opt.add(eq == ctx.int_val((int)C[i]));
+      opt.add(eq == ctx.int_val(B[i]));
     }
 
     z3::expr sum = ctx.int_val(0);
-    for (auto &var : x)
+    for (auto &var : x) {
       sum = sum + var;
+    }
+
     opt.minimize(sum);
 
     int result = 0;
@@ -107,7 +113,10 @@ void part2() {
       for (auto &var : x) {
         result += model.eval(var).get_numeral_int();
       }
+    } else {
+      throw runtime_error("No solution!");
     }
+
     return result;
   };
 
@@ -128,7 +137,7 @@ void part2() {
     vector<vector<int>> A(J, vector<int>(B));
 
     // A * X = joltages
-    // find min(X)
+    // find min(sum(X))
 
     for (int i = 0; i < B; i++) {
       auto button = buttons[i];
