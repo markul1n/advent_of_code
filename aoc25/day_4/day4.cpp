@@ -1,11 +1,7 @@
 #include "../aoc.cpp"
-#include <bits/stdc++.h>
-
-using namespace std;
 
 char PAPER = '@';
 char EMPTY = '.';
-
 
 void part1() {
   vector<string> grid = readLines();

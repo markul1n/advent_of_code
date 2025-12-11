@@ -1,7 +1,4 @@
-#include <bits/stdc++.h>
 #include "../aoc.cpp"
-
-using namespace std;
 
 ll geometric_sum(ll a, ll r, ll n) {
   if (r == 1) {
@@ -14,7 +11,6 @@ ll geometric_sum(ll a, ll r, ll n) {
   }
   return res;
 }
-
 
 void part1() {
 
@@ -92,8 +88,7 @@ void part2() {
   cout << "total: " << total << endl;
 }
 
-
-int main(){
+int main() {
   part1();
   part2();
   return 0;

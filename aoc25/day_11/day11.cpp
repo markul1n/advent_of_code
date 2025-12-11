@@ -14,24 +14,30 @@ unordered_map<string, vector<string>> getGraph(vector<string> lines) {
   return graph;
 }
 
-int dfs(string node, unordered_map<string, vector<string>> &graph) {
+ll countPaths(string node, unordered_map<string, vector<string>> &graph,
+              unordered_map<string, ll> &cache) {
 
   if (node == "out") {
     return 1;
   }
 
-  int total = 0;
-
-  for (string nxt : graph[node]) {
-    total += dfs(nxt, graph);
+  if (cache.contains(node)) {
+    return cache[node];
   }
 
+  ll total = 0;
+
+  for (string nxt : graph[node]) {
+    total += countPaths(nxt, graph, cache);
+  }
+
+  cache[node] = total;
   return total;
 }
 
-ll dfs2(string node, bool fft, bool dac,
-        unordered_map<string, vector<string>> &graph,
-        unordered_map<string, ll> &cache) {
+ll countPathsWithDevices(string node, bool fft, bool dac,
+                         unordered_map<string, vector<string>> &graph,
+                         unordered_map<string, ll> &cache) {
 
   if (node == "out") {
     return (fft && dac) ? 1 : 0;
@@ -45,16 +51,9 @@ ll dfs2(string node, bool fft, bool dac,
 
   ll total = 0;
 
-  if (node == "fft") {
-    fft = true;
-  }
-
-  if (node == "dac") {
-    dac = true;
-  }
-
   for (string nxt : graph[node]) {
-    total += dfs2(nxt, fft, dac, graph, cache);
+    total += countPathsWithDevices(nxt, fft | node == "fft",
+                                   dac | node == "dac", graph, cache);
   }
   cache[key] = total;
   return total;
@@ -62,19 +61,20 @@ ll dfs2(string node, bool fft, bool dac,
 
 void part1() {
   auto lines = readLines("input_1.txt");
-  unordered_map<string, vector<string>> graph = getGraph(lines);
+  auto graph = getGraph(lines);
+  unordered_map<string, ll> cache;
 
-  int res = dfs("you", graph);
+  ll res = countPaths("you", graph, cache);
 
   cout << res << endl;
 }
 
 void part2() {
   auto lines = readLines();
-  unordered_map<string, vector<string>> graph = getGraph(lines);
+  auto graph = getGraph(lines);
   unordered_map<string, ll> cache;
 
-  ll res = dfs2("svr", false, false, graph, cache);
+  ll res = countPathsWithDevices("svr", false, false, graph, cache);
 
   cout << res << endl;
 }

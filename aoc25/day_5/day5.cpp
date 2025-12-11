@@ -14,13 +14,13 @@ void part1() {
   vector<pair<ll, int>> events;
 
   for (string l : intervals) {
-      auto parts = split(l, '-');
-      events.push_back({stol(parts[0]), START});
-      events.push_back({stol(parts[1]) + 1, END});
+    auto parts = split(l, '-');
+    events.push_back({stol(parts[0]), START});
+    events.push_back({stol(parts[1]) + 1, END});
   }
 
   for (string l : ids) {
-      events.push_back({stol(l), ID});
+    events.push_back({stol(l), ID});
   }
 
   sort(events.begin(), events.end(), [](auto a, auto b) {

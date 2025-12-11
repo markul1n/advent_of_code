@@ -11,6 +11,8 @@
 #include <sstream>
 #include <string>
 #include <tuple>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 using namespace std;
@@ -152,17 +154,6 @@ vector<vector<string>> readGrid(const string &filename = INPUT_FILE) {
 
 // --- Printing ---
 
-template <typename S> ostream &operator<<(ostream &os, const vector<S> &v) {
-  os << "[ ";
-  for (size_t i = 0; i < v.size(); ++i) {
-    os << v[i];
-    if (i + 1 < v.size())
-      os << " , ";
-  }
-  os << " ]";
-  return os;
-}
-
 // pair
 template <typename A, typename B>
 ostream &operator<<(ostream &os, const pair<A, B> &p) {
@@ -183,35 +174,66 @@ template <class... Ts> ostream &operator<<(ostream &os, const tuple<Ts...> &t) {
   return os;
 }
 
-template <typename T> ostream &operator<<(ostream &os, const set<T> &s) {
+template <typename Iterator>
+void print_range(std::ostream &os, Iterator begin, Iterator end,
+                 const std::string &sep = ", ") {
+  if (begin == end)
+    return;
+  os << *begin;
+  ++begin;
+  for (; begin != end; ++begin) {
+    os << sep << *begin;
+  }
+}
+
+template <typename S>
+std::ostream &operator<<(std::ostream &os, const std::vector<S> &v) {
+  os << "[ ";
+  print_range(os, v.begin(), v.end(), " , ");
+  os << " ]";
+  return os;
+}
+
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const std::set<T> &s) {
   os << "{ ";
+  print_range(os, s.begin(), s.end());
+  os << " }";
+  return os;
+}
 
-  auto it = s.begin();
-  if (it != s.end()) {
-    os << *it;
-    ++it;
-  }
-  for (; it != s.end(); ++it) {
-    os << ", " << *it;
-  }
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const std::unordered_set<T> &s) {
+  os << "{ ";
+  print_range(os, s.begin(), s.end());
+  os << " }";
+  return os;
+}
 
+template <typename Iterator>
+void print_map_range(std::ostream &os, Iterator begin, Iterator end,
+                     const std::string &sep = ", ") {
+  if (begin == end)
+    return;
+  os << begin->first << ": " << begin->second;
+  ++begin;
+  for (; begin != end; ++begin) {
+    os << sep << begin->first << ": " << begin->second;
+  }
+}
+
+template <typename K, typename V>
+std::ostream &operator<<(std::ostream &os, const std::map<K, V> &m) {
+  os << "{ ";
+  print_map_range(os, m.begin(), m.end());
   os << " }";
   return os;
 }
 
 template <typename K, typename V>
-ostream &operator<<(ostream &os, const map<K, V> &m) {
+std::ostream &operator<<(std::ostream &os, const std::unordered_map<K, V> &m) {
   os << "{ ";
-
-  auto it = m.begin();
-  if (it != m.end()) {
-    os << it->first << ": " << it->second;
-    ++it;
-  }
-  for (; it != m.end(); ++it) {
-    os << ", " << it->first << ": " << it->second;
-  }
-
+  print_map_range(os, m.begin(), m.end());
   os << " }";
   return os;
 }
