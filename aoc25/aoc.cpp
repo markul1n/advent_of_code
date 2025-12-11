@@ -6,6 +6,7 @@
 #include <map>
 #include <queue>
 #include <ranges>
+#include <regex>
 #include <set>
 #include <sstream>
 #include <string>
@@ -39,6 +40,24 @@ vector<string> split(const string &text, char d) {
   for (auto &&part : text | views::split(d)) {
     string s(part.begin(), part.end());
     out.push_back(std::move(s));
+  }
+
+  return out;
+}
+
+vector<string> splitRegex(const string &text, const string &pattern) {
+  vector<string> out;
+  regex regex_pattern(pattern);
+
+  sregex_token_iterator iter(text.begin(), text.end(), regex_pattern, -1);
+  sregex_token_iterator end;
+
+  for (; iter != end; ++iter) {
+    string s = *iter;
+    trim(s);
+    if (!s.empty()) {
+      out.push_back(s);
+    }
   }
 
   return out;

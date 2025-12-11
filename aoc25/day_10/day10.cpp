@@ -1,23 +1,8 @@
 #include "../aoc.cpp"
-#include <regex>
 #include <z3++.h>
 
 vector<string> split_brackets(const string &text) {
-  vector<string> out;
-  regex bracket_pattern(R"([\(\)\[\]\{\}<>])");
-
-  sregex_token_iterator iter(text.begin(), text.end(), bracket_pattern, -1);
-  sregex_token_iterator end;
-
-  for (; iter != end; ++iter) {
-    string s = *iter;
-    trim(s);
-    if (!s.empty()) {
-      out.push_back(s);
-    }
-  }
-
-  return out;
+  return splitRegex(text, R"([\(\)\[\]\{\}])");
 }
 
 int getMin(int i, int curr, vector<int> &buttons,
