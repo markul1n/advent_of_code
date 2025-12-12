@@ -4,6 +4,7 @@
 #include <functional>
 #include <iostream>
 #include <map>
+#include <numeric>
 #include <queue>
 #include <ranges>
 #include <regex>
@@ -14,7 +15,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <numeric>
 
 using namespace std;
 
