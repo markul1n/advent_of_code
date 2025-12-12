@@ -20,8 +20,8 @@ void part1() {
   vector<pll> ranges;
 
   for (auto p : parts) {
-    auto range = split(p, '-');
-    ranges.push_back({stoll(range.at(0)), stoll(range.at(1))});
+    auto range = parseLongs(line);
+    ranges.push_back({range.at(0), range.at(1)});
   }
 
   ll total = 0;
@@ -53,8 +53,8 @@ void part2() {
   vector<pll> ranges;
 
   for (auto p : parts) {
-    auto range = split(p, '-');
-    ranges.push_back({stoll(range.at(0)), stoll(range.at(1))});
+    auto range = parseLongs(p);
+    ranges.push_back({range.at(0), range.at(1)});
   }
 
   ll total = 0;

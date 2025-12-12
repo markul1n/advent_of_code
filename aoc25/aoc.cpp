@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <numeric>
 
 using namespace std;
 
@@ -88,7 +89,7 @@ vector<string> readLines(const string &filename = INPUT_FILE) {
 
 vector<int> parseInts(const string &line) {
   vector<int> ints;
-  auto nums = split(line, ',');
+  auto nums = splitRegex(line, "\\D+");
   for (string num : nums) {
     trim(num);
     if (num.empty())
@@ -97,6 +98,19 @@ vector<int> parseInts(const string &line) {
   }
 
   return ints;
+}
+
+vector<ll> parseLongs(const string &line) {
+  vector<ll> longs;
+  auto nums = splitRegex(line, "\\D+");
+  for (string num : nums) {
+    trim(num);
+    if (num.empty())
+      continue;
+    longs.push_back(stol(num));
+  }
+
+  return longs;
 }
 
 string readLine(const string &filename = INPUT_FILE) {

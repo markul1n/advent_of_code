@@ -115,8 +115,8 @@ void part2() {
 
       groups--;
       if (groups == 1) {
-        ll x1 = stol(split(lines[i], ',')[0]);
-        ll x2 = stol(split(lines[j], ',')[0]);
+        ll x1 = parseLongs(lines[i])[0];
+        ll x2 = parseLongs(lines[j])[0];
         cout << x1 * x2 << endl;
         return;
       }
@@ -125,7 +125,7 @@ void part2() {
   }
 }
 int main() {
-  // part1();
+  part1();
   part2();
   return 0;
 }

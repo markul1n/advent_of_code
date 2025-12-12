@@ -14,13 +14,13 @@ void part1() {
   vector<pair<ll, int>> events;
 
   for (string l : intervals) {
-    auto parts = split(l, '-');
-    events.push_back({stol(parts[0]), START});
-    events.push_back({stol(parts[1]) + 1, END});
+    auto interval = parseLongs(l);
+    events.push_back({interval[0], START});
+    events.push_back({interval[1] + 1, END});
   }
 
-  for (string l : ids) {
-    events.push_back({stol(l), ID});
+  for (string id : ids) {
+    events.push_back({stol(id), ID});
   }
 
   sort(events.begin(), events.end(), [](auto a, auto b) {
@@ -50,9 +50,9 @@ void part2() {
   auto lines = readBlocks()[0];
   vector<pair<ll, int>> events;
   for (string l : lines) {
-    auto parts = split(l, '-');
-    events.push_back({stol(parts[0]), START});
-    events.push_back({stol(parts[1]) + 1, END});
+    auto interval = parseLongs(l);
+    events.push_back({interval[0], START});
+    events.push_back({interval[1] + 1, END});
   }
 
   sort(events.begin(), events.end(), [](auto a, auto b) {

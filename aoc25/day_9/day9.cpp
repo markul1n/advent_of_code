@@ -4,9 +4,9 @@ vector<pair<int, int>> getCoords() {
   auto lines = readLines();
   vector<pair<int, int>> coords;
   for (auto line : lines) {
-    auto xy = split(line, ',');
-    int x = stoi(xy.at(0));
-    int y = stoi(xy.at(1));
+    auto xy = parseInts(line);
+    int x = xy.at(0);
+    int y = xy.at(1);
     coords.push_back({x, y});
   }
   return coords;
